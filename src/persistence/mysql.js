@@ -16,10 +16,12 @@ const {
 let pool;
 
 async function init() {
-    const host = HOST_FILE ? fs.readFileSync(HOST_FILE) : HOST;
-    const user = USER_FILE ? fs.readFileSync(USER_FILE) : USER;
-    const password = PASSWORD_FILE ? fs.readFileSync(PASSWORD_FILE) : PASSWORD;
-    const database = DB_FILE ? fs.readFileSync(DB_FILE) : DB;
+    const readSecret = file => fs.readFileSync(file, 'utf8').toString().trim();
+
+    const host = HOST_FILE ? readSecret(HOST_FILE) : HOST;
+    const user = USER_FILE ? readSecret(USER_FILE) : USER;
+    const password = PASSWORD_FILE ? readSecret(PASSWORD_FILE) : PASSWORD;
+    const database = DB_FILE ? readSecret(DB_FILE) : DB;
 
     await waitPort({ 
         host, 
