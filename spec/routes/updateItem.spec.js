@@ -31,3 +31,22 @@ test('it updates items correctly', async () => {
     expect(res.send.mock.calls[0].length).toBe(1);
     expect(res.send.mock.calls[0][0]).toEqual(ITEM);
 });
+
+test('it returns 404 when item does not exist', async () => {
+    const req = {
+        params: { id: 9999 },
+        body: { name: 'New title', completed: false },
+    };
+    const res = { sendStatus: jest.fn() };
+
+    db.getItem.mockReturnValue(Promise.resolve(undefined));
+
+    await updateItem(req, res);
+
+    expect(db.updateItem).toHaveBeenCalledWith(req.params.id, {
+        name: 'New title',
+        completed: false,
+    });
+
+    expect(res.sendStatus).toHaveBeenCalledWith(404);
+});
