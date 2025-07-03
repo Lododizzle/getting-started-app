@@ -2,20 +2,21 @@ const waitPort = require('wait-port');
 const fs = require('fs');
 const mysql = require('mysql2');
 
-const {
-    MYSQL_HOST: HOST,
-    MYSQL_HOST_FILE: HOST_FILE,
-    MYSQL_USER: USER,
-    MYSQL_USER_FILE: USER_FILE,
-    MYSQL_PASSWORD: PASSWORD,
-    MYSQL_PASSWORD_FILE: PASSWORD_FILE,
-    MYSQL_DB: DB,
-    MYSQL_DB_FILE: DB_FILE,
-} = process.env;
 
 let pool;
 
 async function init() {
+    const {
+        MYSQL_HOST: HOST,
+        MYSQL_HOST_FILE: HOST_FILE,
+        MYSQL_USER: USER,
+        MYSQL_USER_FILE: USER_FILE,
+        MYSQL_PASSWORD: PASSWORD,
+        MYSQL_PASSWORD_FILE: PASSWORD_FILE,
+        MYSQL_DB: DB,
+        MYSQL_DB_FILE: DB_FILE,
+    } = process.env;
+
     const readSecret = file => fs.readFileSync(file, 'utf8').toString().trim();
 
     const host = HOST_FILE ? readSecret(HOST_FILE) : HOST;
@@ -45,7 +46,7 @@ async function init() {
             err => {
                 if (err) return rej(err);
 
-                console.log(`Connected to mysql db at host ${HOST}`);
+                console.log(`Connected to mysql db at host ${host}`);
                 acc();
             },
         );
